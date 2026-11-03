@@ -1,0 +1,232 @@
+
+/* Reset default spacing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* General page styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8faf5;
+}
+
+/* Main split-screen layout */
+.login-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* LEFT SIDE: Image */
+.image-section {
+    width: 50%;
+    background-image:
+        linear-gradient(
+            rgba(0, 0, 0, 0.2),
+            rgba(0, 0, 0, 0.6)
+        ),
+        url("images/recipe-background.jpg");
+
+    background-size: cover;
+    background-position: center;
+
+    display: flex;
+    align-items: flex-end;
+    padding: 60px;
+    color: white;
+}
+
+.brand-lockup {
+    margin-bottom: 16px;
+}
+
+.brand-kicker {
+    display: block;
+    margin-bottom: 8px;
+    color: #dff2cc;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+}
+
+.brand-title {
+    position: relative;
+    display: inline-block;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(52px, 6vw, 82px);
+    font-weight: 700;
+    line-height: 0.9;
+    letter-spacing: -0.055em;
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.28);
+}
+
+.brand-title span {
+    color: #b8e986;
+    font-style: italic;
+}
+
+.brand-title i {
+    position: absolute;
+    right: -16px;
+    top: -5px;
+    width: 11px;
+    height: 11px;
+    background: #b8e986;
+    border-radius: 50% 50% 50% 10%;
+    transform: rotate(-32deg);
+}
+
+.image-content p {
+    font-size: 19px;
+    line-height: 1.6;
+    max-width: 400px;
+}
+
+/* RIGHT SIDE: Login form */
+.form-section {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+.login-box {
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-box h2 {
+    font-size: 32px;
+    color: #253b2c;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #777;
+    margin-bottom: 35px;
+}
+
+/* Input fields */
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 22px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+input:focus {
+    outline: 2px solid #368b51;
+    outline-offset: 1px;
+    border-color: #368b51;
+}
+
+/* Password visibility button */
+.password-container {
+    position: relative;
+}
+
+.password-container input {
+    padding-right: 75px;
+}
+
+#toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 14px;
+    background: none;
+    border: none;
+    color: #368b51;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Forgot password link */
+.forgot-password {
+    display: block;
+    text-align: right;
+    margin-bottom: 20px;
+    color: #368b51;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+/* Login button */
+.login-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: #368b51;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.login-btn:hover {
+    background-color: #286b3d;
+}
+
+.signup-text {
+    text-align: center;
+    margin-top: 25px;
+    color: #666;
+}
+
+.signup-text a {
+    color: #368b51;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+#message {
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+#message:empty {
+    display: none;
+}
+
+#message.error {
+    color: #b42318;
+}
+
+/* Mobile responsive layout */
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+    }
+
+    .image-section {
+        width: 100%;
+        min-height: 240px;
+        padding: 30px;
+    }
+
+    .brand-title {
+        font-size: 48px;
+    }
+
+    .brand-kicker {
+        font-size: 10px;
+    }
+
+    .form-section {
+        width: 100%;
+        padding: 40px 25px;
+    }
+}
