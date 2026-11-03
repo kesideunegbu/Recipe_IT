@@ -47,12 +47,12 @@ def client(tmp_path):
     return app.test_client()
 
 
-def register(client, username="alice", password="password123"):
-    return client.post("/api/register", json={"username": username, "password": password})
+def register(client, email="alice@example.com", password="password123"):
+    return client.post("/api/register", json={"email": email, "password": password})
 
 
-def login(client, username="alice", password="password123"):
-    return client.post("/api/login", json={"username": username, "password": password})
+def login(client, email="alice@example.com", password="password123"):
+    return client.post("/api/login", json={"email": email, "password": password})
 
 
 def test_register_then_login(client):
@@ -67,15 +67,20 @@ def test_login_wrong_password(client):
 
 def test_login_unknown_user_gives_same_error(client):
     register(client)
-    unknown = login(client, username="bob")
+    unknown = login(client, email="bob@example.com")
     wrong = login(client, password="wrongpass1")
     assert unknown.status_code == wrong.status_code == 401
     assert unknown.get_json() == wrong.get_json()
 
 
-def test_duplicate_username_rejected(client):
+def test_duplicate_email_rejected(client):
     register(client)
-    assert register(client, username="ALICE").status_code == 409
+    assert register(client, email="ALICE@example.com").status_code == 409
+
+
+@pytest.mark.parametrize("email", ["", "alice", "alice@", "@example.com", "alice@localhost", "a b@example.com"])
+def test_register_rejects_invalid_email(client, email):
+    assert register(client, email=email).status_code == 400
 
 
 def test_register_rejects_weak_password(client):
@@ -87,7 +92,17 @@ def test_password_stored_as_hash(client, tmp_path):
 
     register(client)
     row = sqlite3.connect(tmp_path / "test.db").execute(
-        "SELECT password_hash FROM users WHERE username = 'alice'"
+        "SELECT password_hash FROM users WHERE email = 'alice@example.com'"
     ).fetchone()
     assert row[0].startswith("$argon2id$")
     assert "password123" not in row[0]
+
+
+def test_serves_login_page(client):
+    assert client.get("/").headers["Location"].endswith("/login.html")
+    page = client.get("/login.html")
+    assert page.status_code == 200
+    assert b'id="login-form"' in page.data
+    assert client.get("/login.css").status_code == 200
+    assert client.get("/login.js").status_code == 200
+    assert client.get("/images/recipe-background.jpg").status_code == 200
