@@ -9,10 +9,24 @@ cd Backend
 python -m venv .venv
 .venv\Scripts\activate        # Windows  (macOS/Linux: source .venv/bin/activate)
 pip install -r requirements.txt
-python app.py                 # open http://127.0.0.1:5000 (serves the Frontend pages too)
+python Server\start_server.py # serves the Frontend pages and API
 ```
 
 Run tests: `python -m pytest`
+
+From `Backend\Server` on Windows, `start_server.bat` runs the same production
+server using `Backend\.venv`. The server binds to all interfaces by default so
+it can be reached by a hosting provider or another device on the network.
+
+Configure hosting with environment variables:
+
+| Variable | Default | Description |
+|---|---:|---|
+| `HOST` | `0.0.0.0` | Interface to bind |
+| `PORT` | `5000` | TCP port |
+| `WAITRESS_THREADS` | `4` | Request worker threads |
+
+For local development, `python app.py` still starts Flask's development server.
 
 ## Endpoints (for the login page)
 
