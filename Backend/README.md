@@ -39,6 +39,8 @@ Settings are read from environment variables, falling back to `Backend/.env`. `.
 | `GEMINI_FALLBACK_MODEL` | Optional. Tried when the main model is overloaded or times out; default `gemini-3.6-flash`. |
 | `GEMINI_THINKING_LEVEL` | Optional. How much the model reasons before answering; default `minimal` (fastest, ~3× quicker than the model's default in testing). |
 | `GEMINI_TIMEOUT_SECONDS` | Optional. Give up on a Gemini call after this many seconds; default `30`. |
+| `GENERATE_PER_MINUTE` | Optional. Recipe generations each user may make per minute; default `10`. |
+| `GENERATE_PER_DAY` | Optional. Recipe generations each user may make per 24 hours; default `100`. Caps what one account can cost. |
 | `SESSION_COOKIE_SECURE` | Optional. Set to `1` when served over HTTPS so the cookie is never sent over plain HTTP. |
 | `DATABASE_PATH` | Optional. SQLite file; default `Backend/recipe_it.db`. |
 
@@ -52,6 +54,7 @@ Settings are read from environment variables, falling back to `Backend/.env`. `.
 | `auth.py` | Blueprint for register / login / logout / me, and `@login_required` |
 | `recipes.py` | Blueprint for `/api/recipes/*`; validates input |
 | `generator.py` | Calls Gemini (fallback model, timeout) and cleans up its recipes |
+| `ratelimit.py` | In-memory per-user limit on recipe generation |
 | `passwords.py` | Argon2id hashing and password rules |
 
 Tests never call Gemini: `conftest.py` hides `GEMINI_API_KEY`, and `test_recipes.py` swaps in a fake client via `app.extensions["recipe_generator"]`.
@@ -135,6 +138,7 @@ Response `200`:
 | `400` | Bad input (message says what) |
 | `401` | Not logged in |
 | `422` | Gemini couldn't make recipes from those ingredients |
+| `429` | Too many generations (`GENERATE_PER_MINUTE` / `GENERATE_PER_DAY`); the `Retry-After` header gives the seconds to wait. Bad input (`400`) doesn't count |
 | `502` | Gemini sent back something unusable |
 | `503` | Gemini is busy (after trying the fallback model) or generation isn't configured |
 | `504` | Gemini took longer than `GEMINI_TIMEOUT_SECONDS` |
