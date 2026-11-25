@@ -20,7 +20,7 @@ togglePassword.addEventListener("click", function () {
 });
 
 // Handle login form submission
-loginForm.addEventListener("submit", function (event) {
+loginForm.addEventListener("submit", async function (event) {
     event.preventDefault();
 
     const email = emailInput.value.trim();
@@ -42,9 +42,32 @@ loginForm.addEventListener("submit", function (event) {
         return;
     }
 
-    // Frontend-only demonstration
-    message.textContent =
-        "Form validated. Backend login is not connected yet.";
+    // Send the login to the backend. On success the server sets a session
+    // cookie, so later requests know who the user is.
+    const submitButton = loginForm.querySelector("button[type=submit]");
+    submitButton.disabled = true;
+    message.textContent = "";
 
-    console.log("Login form validated.");
+    try {
+        const response = await fetch("/api/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+        });
+
+        if (response.ok) {
+            window.location.href = "index.html";
+            return;
+        }
+
+        const data = await response.json().catch(() => ({}));
+        message.textContent = data.error || "Login failed. Please try again.";
+        message.className = "error";
+    } catch (error) {
+        message.textContent =
+            "Could not reach the server. Please try again.";
+        message.className = "error";
+    } finally {
+        submitButton.disabled = false;
+    }
 });
