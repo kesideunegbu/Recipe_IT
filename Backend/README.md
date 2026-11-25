@@ -10,10 +10,22 @@ python -m venv .venv
 .venv\Scripts\activate        # Windows  (macOS/Linux: source .venv/bin/activate)
 pip install -r requirements.txt
 copy .env.example .env        # macOS/Linux: cp .env.example .env  — then fill it in
-python app.py                 # open http://127.0.0.1:5000 (serves the Frontend pages too)
+python app.py                 # development server: http://127.0.0.1:5000 (serves the Frontend pages too)
 ```
 
 Run tests: `python -m pytest`
+
+## Production server
+
+`python Server\start_server.py` runs the app with Waitress, a production server. On Windows, `start_server.bat` in `Backend\Server` does the same using `Backend\.venv`. It binds to all interfaces by default so a hosting provider or another device on the network can reach it.
+
+| Variable | Default | Description |
+|---|---:|---|
+| `HOST` | `0.0.0.0` | Interface to bind |
+| `PORT` | `5000` | TCP port |
+| `WAITRESS_THREADS` | `4` | Request worker threads |
+
+When serving over HTTPS, also set `SESSION_COOKIE_SECURE=1` (see below).
 
 ## Configuration (`.env`)
 
