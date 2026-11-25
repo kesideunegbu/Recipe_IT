@@ -3,7 +3,9 @@
 Saving, listing and favouriting recipes come once the database tables exist.
 """
 
-from flask import Blueprint, current_app, jsonify, request
+import math
+
+from flask import Blueprint, current_app, g, jsonify, request
 
 from auth import login_required
 from generator import GenerationError
@@ -54,6 +56,16 @@ def _optional_int(data, key, low, high, default):
     return value, None
 
 
+def _slow_down_message(wait):
+    if wait < 90:
+        when = f"{wait} second{'s' if wait != 1 else ''}"
+    elif wait < 90 * 60:
+        when = f"{math.ceil(wait / 60)} minutes"
+    else:
+        when = f"{math.ceil(wait / 3600)} hours"
+    return f"You're making recipes too quickly. Try again in {when}."
+
+
 @bp.post("/generate")
 @login_required
 def generate():
@@ -74,6 +86,13 @@ def generate():
     generator = current_app.extensions.get("recipe_generator")
     if generator is None:
         return jsonify(error="Recipe generation is not available right now."), 503
+
+    # Checked after validation, so bad input never uses up a user's allowance.
+    allowed, wait = current_app.extensions["generate_limiter"].hit(g.user_id)
+    if not allowed:
+        response = jsonify(error=_slow_down_message(wait))
+        response.headers["Retry-After"] = str(wait)
+        return response, 429
 
     try:
         recipes, model = generator.generate(ingredients, servings, max_minutes)

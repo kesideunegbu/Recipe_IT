@@ -19,6 +19,7 @@ import db
 import recipes
 from config import FRONTEND_DIR, load_config
 from generator import RecipeGenerator
+from ratelimit import RateLimiter
 
 
 def create_app(database=None, secret_key=None):
@@ -35,6 +36,11 @@ def create_app(database=None, secret_key=None):
     # One Gemini client for the whole app (None if GEMINI_API_KEY is unset;
     # the generate endpoint then answers 503). Tests swap in a fake here.
     app.extensions["recipe_generator"] = RecipeGenerator.from_config(app.config)
+    # Per-user cap on Gemini calls (see ratelimit.py for its limits).
+    app.extensions["generate_limiter"] = RateLimiter([
+        (app.config["GENERATE_PER_MINUTE"], 60),
+        (app.config["GENERATE_PER_DAY"], 24 * 60 * 60),
+    ])
     if app.extensions["recipe_generator"] is None:
         logging.getLogger(__name__).warning(
             "GEMINI_API_KEY is not set; recipe generation is disabled."

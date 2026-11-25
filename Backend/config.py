@@ -30,6 +30,10 @@ DEFAULT_GEMINI_FALLBACK_MODEL = "gemini-3.6-flash"
 DEFAULT_GEMINI_THINKING_LEVEL = "minimal"
 # Give up on a Gemini call after this long, so the page never hangs.
 DEFAULT_GEMINI_TIMEOUT_SECONDS = 30
+# Recipe generations allowed per user. The per-minute cap stops bursts; the
+# per-day cap bounds what one account can cost.
+DEFAULT_GENERATE_PER_MINUTE = 10
+DEFAULT_GENERATE_PER_DAY = 100
 
 # How long a login lasts before the user has to sign in again.
 SESSION_LIFETIME = timedelta(days=7)
@@ -73,7 +77,26 @@ def load_config(database=None, secret_key=None):
         "GEMINI_TIMEOUT_SECONDS": _positive_number(
             "GEMINI_TIMEOUT_SECONDS", DEFAULT_GEMINI_TIMEOUT_SECONDS
         ),
+        "GENERATE_PER_MINUTE": _positive_int(
+            "GENERATE_PER_MINUTE", DEFAULT_GENERATE_PER_MINUTE
+        ),
+        "GENERATE_PER_DAY": _positive_int(
+            "GENERATE_PER_DAY", DEFAULT_GENERATE_PER_DAY
+        ),
     }
+
+
+def _positive_int(name, default):
+    raw = os.environ.get(name)
+    if not raw:
+        return default
+    try:
+        value = int(raw)
+    except ValueError:
+        raise ValueError(f"{name} must be a whole number, got {raw!r}.")
+    if value < 1:
+        raise ValueError(f"{name} must be at least 1, got {raw!r}.")
+    return value
 
 
 def _positive_number(name, default):
