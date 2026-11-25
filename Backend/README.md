@@ -50,7 +50,11 @@ Settings are read from environment variables, falling back to `Backend/.env`. `.
 | `config.py` | Reads settings from the environment / `.env` |
 | `db.py` | `get_db()` connection per request, and `SCHEMA` (add new tables here) |
 | `auth.py` | Blueprint for register / login / logout / me, and `@login_required` |
+| `recipes.py` | Blueprint for `/api/recipes/*`; validates input |
+| `generator.py` | Calls Gemini (fallback model, timeout) and cleans up its recipes |
 | `passwords.py` | Argon2id hashing and password rules |
+
+Tests never call Gemini: `conftest.py` hides `GEMINI_API_KEY`, and `test_recipes.py` swaps in a fake client via `app.extensions["recipe_generator"]`.
 
 New features go in their own blueprint module (for example `pantry.py`), registered in `create_app()`. Protect their routes with `@login_required` from `auth.py`: it returns `401` when nobody is logged in and otherwise sets `g.user_id`.
 
@@ -88,3 +92,49 @@ A successful login sets a signed, HttpOnly session cookie (valid 7 days). The br
 | `POST /api/logout` | `200 {"message": "Logged out."}` | — |
 
 Pages that need a login include `<script src="auth.js" defer></script>`, which redirects to the login page when the user isn't logged in.
+
+### Recipe generation
+
+`POST /api/recipes/generate` (login required) turns ingredients into 3 recipes with Gemini. Usually takes a few seconds; allow up to 30.
+
+Request:
+
+```json
+{ "ingredients": ["eggs", "rice", "spinach"], "servings": 2, "max_minutes": 30 }
+```
+
+- `ingredients`: 1–30 names, each up to 50 characters (letters, digits, spaces and `- ' & , . / ( )`). Trimmed, lowercased and de-duplicated.
+- `servings`: optional, 1–12, default 2. `max_minutes`: optional, 5–240.
+
+Response `200`:
+
+```json
+{
+  "recipes": [
+    {
+      "title": "Garlic Egg Fried Rice",
+      "description": "A quick and savory fried rice.",
+      "ingredients": [
+        { "name": "eggs", "amount": "2", "in_pantry": true },
+        { "name": "soy sauce", "amount": "1 tablespoon", "in_pantry": false }
+      ],
+      "steps": ["Heat oil in a pan.", "Scramble the eggs.", "Add the rice and toss."],
+      "prep_minutes": 15,
+      "servings": 2
+    }
+  ],
+  "ingredients": ["eggs", "rice", "spinach"],
+  "model": "gemini-3.5-flash-lite"
+}
+```
+
+`in_pantry: false` means the user needs to buy it. `prep_minutes` and `servings` may be `null`.
+
+| Status | Meaning |
+|---|---|
+| `400` | Bad input (message says what) |
+| `401` | Not logged in |
+| `422` | Gemini couldn't make recipes from those ingredients |
+| `502` | Gemini sent back something unusable |
+| `503` | Gemini is busy (after trying the fallback model) or generation isn't configured |
+| `504` | Gemini took longer than `GEMINI_TIMEOUT_SECONDS` |
