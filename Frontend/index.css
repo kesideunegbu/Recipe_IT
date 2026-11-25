@@ -1,0 +1,287 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8faf5;
+    color: #253b2c;
+}
+
+/* Top bar */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 32px;
+    background: #253b2c;
+    color: white;
+}
+
+.logo {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+}
+
+.logo span {
+    color: #b8e986;
+    font-style: italic;
+}
+
+.account {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    font-size: 14px;
+}
+
+.link-btn {
+    background: none;
+    border: 1px solid #b8e986;
+    color: #b8e986;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Main layout */
+.page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 24px 64px;
+}
+
+.panel {
+    background: white;
+    border-radius: 12px;
+    padding: 28px;
+    box-shadow: 0 2px 12px rgba(37, 59, 44, 0.08);
+}
+
+.panel h1 {
+    font-size: 28px;
+    margin-bottom: 6px;
+}
+
+.hint {
+    color: #777;
+    margin-bottom: 18px;
+}
+
+/* Ingredient chips */
+.chip-input {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 8px;
+    cursor: text;
+}
+
+.chip-input:focus-within {
+    outline: 2px solid #368b51;
+    outline-offset: 1px;
+    border-color: #368b51;
+}
+
+#chips {
+    display: contents;
+    list-style: none;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #e5f4e4;
+    color: #253b2c;
+    border-radius: 999px;
+    padding: 6px 6px 6px 12px;
+    font-size: 14px;
+}
+
+.chip button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    color: #368b51;
+    padding: 0 4px;
+}
+
+#ingredient-input {
+    flex: 1;
+    min-width: 180px;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    padding: 6px;
+}
+
+.options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-end;
+    margin-top: 18px;
+}
+
+.options label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.options select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    background: white;
+}
+
+.primary-btn {
+    margin-left: auto;
+    padding: 12px 28px;
+    background-color: #368b51;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.primary-btn:hover {
+    background-color: #286b3d;
+}
+
+.primary-btn:disabled {
+    background-color: #9bbfa5;
+    cursor: wait;
+}
+
+#status {
+    margin-top: 16px;
+    font-size: 15px;
+}
+
+#status:empty {
+    display: none;
+}
+
+#status.error {
+    color: #b42318;
+}
+
+#status.loading::before {
+    content: "";
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-right: 8px;
+    vertical-align: -2px;
+    border: 2px solid #b8e986;
+    border-top-color: #368b51;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Recipe cards */
+.results {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 28px;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 22px;
+    box-shadow: 0 2px 12px rgba(37, 59, 44, 0.08);
+}
+
+.card-title {
+    font-size: 20px;
+    margin-bottom: 4px;
+}
+
+.card-meta {
+    color: #368b51;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.card-description {
+    color: #555;
+    margin-bottom: 14px;
+    line-height: 1.5;
+}
+
+.card h3 {
+    font-size: 15px;
+    margin: 14px 0 6px;
+}
+
+.card ul,
+.card ol {
+    padding-left: 20px;
+    line-height: 1.6;
+}
+
+.need {
+    margin-left: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #9a5b00;
+    background: #f9eeda;
+    border-radius: 4px;
+    padding: 1px 6px;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+}
+
+@media (max-width: 600px) {
+    .topbar {
+        padding: 14px 16px;
+    }
+
+    #user-email {
+        display: none;
+    }
+
+    .page {
+        padding: 20px 16px 48px;
+    }
+
+    .panel {
+        padding: 20px;
+    }
+
+    .primary-btn {
+        width: 100%;
+        margin-left: 0;
+    }
+}

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Sign Up | RECIPE IT</title>
+
+    <link rel="stylesheet" href="login.css">
+    <script src="register.js" defer></script>
+</head>
+<body>
+
+    <main class="login-container">
+
+        <!-- Left side: Recipe image -->
+        <section class="image-section">
+            <div class="image-content">
+                <div class="brand-lockup">
+                    <span class="brand-kicker">Cook with what you have</span>
+                    <h1 class="brand-title" aria-label="RECIPE IT">
+                        RECIPE<span>IT</span><i aria-hidden="true"></i>
+                    </h1>
+                </div>
+                <p>
+                    Turn ingredients you already have
+                    into delicious meals.
+                </p>
+            </div>
+        </section>
+
+        <!-- Right side: Sign-up form -->
+        <section class="form-section">
+            <div class="login-box">
+
+                <h2>Create an account</h2>
+                <p class="subtitle">
+                    Sign up to start cooking with what you have.
+                </p>
+
+                <form id="register-form">
+
+                    <label for="email">Email Address</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        autocomplete="email"
+                        required
+                    >
+
+                    <label for="password">Password</label>
+                    <div class="password-container">
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="At least 8 characters"
+                            autocomplete="new-password"
+                            minlength="8"
+                            maxlength="128"
+                            required
+                        >
+                        <button
+                            type="button"
+                            id="toggle-password"
+                            aria-label="Show password"
+                        >
+                            Show
+                        </button>
+                    </div>
+
+                    <p id="message" role="status" aria-live="polite"></p>
+
+                    <button type="submit" class="login-btn">
+                        Sign Up
+                    </button>
+
+                </form>
+
+                <p class="signup-text">
+                    Already have an account?
+                    <a href="login.html">Log In</a>
+                </p>
+
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>

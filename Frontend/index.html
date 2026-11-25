@@ -4,11 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RECIPE IT</title>
+    <link rel="stylesheet" href="index.css">
     <script src="auth.js" defer></script>
+    <script src="index.js" defer></script>
 </head>
 <body>
-    <!-- Placeholder main page: shows who is logged in until the recipe UI is built. -->
-    <p>Logged in as <strong id="user-email"></strong></p>
-    <button type="button" id="logout-btn">Log out</button>
+
+    <header class="topbar">
+        <span class="logo">RECIPE<span>IT</span></span>
+        <div class="account">
+            <span id="user-email"></span>
+            <button type="button" id="logout-btn" class="link-btn">Log out</button>
+        </div>
+    </header>
+
+    <main class="page">
+
+        <section class="panel">
+            <h1>What's in your kitchen?</h1>
+            <p class="hint">Type an ingredient and press Enter (or a comma). Add as many as you like.</p>
+
+            <form id="generate-form">
+                <label for="ingredient-input" class="visually-hidden">Ingredient</label>
+                <div class="chip-input" id="chip-box">
+                    <ul id="chips" aria-label="Your ingredients"></ul>
+                    <input
+                        id="ingredient-input"
+                        type="text"
+                        placeholder="e.g. eggs, rice, spinach"
+                        maxlength="50"
+                        autocomplete="off"
+                    >
+                </div>
+
+                <div class="options">
+                    <label>
+                        Servings
+                        <select id="servings">
+                            <option>1</option>
+                            <option selected>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>6</option>
+                            <option>8</option>
+                        </select>
+                    </label>
+                    <label>
+                        Time limit
+                        <select id="max-minutes">
+                            <option value="">Any</option>
+                            <option value="15">15 min</option>
+                            <option value="30">30 min</option>
+                            <option value="60">1 hour</option>
+                        </select>
+                    </label>
+                    <button type="submit" id="generate-btn" class="primary-btn">Find recipes</button>
+                </div>
+            </form>
+
+            <p id="status" role="status" aria-live="polite"></p>
+        </section>
+
+        <section id="results" class="results" aria-label="Recipes"></section>
+
+    </main>
+
+    <!-- One recipe card; copied by index.js for each recipe. -->
+    <template id="recipe-template">
+        <article class="card">
+            <h2 class="card-title"></h2>
+            <p class="card-meta"></p>
+            <p class="card-description"></p>
+            <h3>Ingredients</h3>
+            <ul class="card-ingredients"></ul>
+            <h3>Steps</h3>
+            <ol class="card-steps"></ol>
+        </article>
+    </template>
+
 </body>
 </html>
