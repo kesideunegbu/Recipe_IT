@@ -5,7 +5,6 @@ const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 const togglePassword = document.getElementById("toggle-password");
 const message = document.getElementById("message");
-const submitButton = loginForm.querySelector('button[type="submit"]');
 
 // Show or hide password
 togglePassword.addEventListener("click", function () {
@@ -21,35 +20,31 @@ togglePassword.addEventListener("click", function () {
 });
 
 // Handle login form submission
-loginForm.addEventListener("submit", async function (event) {
+loginForm.addEventListener("submit", function (event) {
     event.preventDefault();
-    if (submitButton.disabled) return;
 
     const email = emailInput.value.trim();
     const password = passwordInput.value;
 
-    submitButton.disabled = true;
-    message.classList.remove("error");
-    message.textContent = "Checking your credentials…";
+    message.className = "";
 
-    try {
-        const response = await fetch(loginForm.action, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password }),
-        });
-        const data = await response.json().catch(() => ({}));
-        if (response.ok && data.message === "Logged in.") {
-            passwordInput.value = "";
-            window.location.assign("index.html");
-        } else {
-            message.classList.add("error");
-            message.textContent = data.error || "Could not sign in. Try again.";
-        }
-    } catch {
-        message.classList.add("error");
-        message.textContent = "Could not reach the server. Try again.";
-    } finally {
-        submitButton.disabled = false;
+    // Check for empty fields
+    if (!email || !password) {
+        message.textContent = "Please fill in all fields.";
+        message.className = "error";
+        return;
     }
+
+    // Check email format
+    if (!emailInput.validity.valid) {
+        message.textContent = "Please enter a valid email.";
+        message.className = "error";
+        return;
+    }
+
+    // Frontend-only demonstration
+    message.textContent =
+        "Form validated. Backend login is not connected yet.";
+
+    console.log("Login form validated.");
 });

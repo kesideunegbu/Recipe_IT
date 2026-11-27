@@ -6,7 +6,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Sign In | RECIPE IT</title>
+    <title>Login | RECIME</title>
 
     <link rel="stylesheet" href="login.css">
     <script src="login.js" defer></script>
@@ -20,7 +20,7 @@
             <div class="image-content">
                 <div class="brand-lockup">
                     <span class="brand-kicker">Cook with what you have</span>
-                    <h1 class="brand-title" aria-label="Recipe It">
+                    <h1 class="brand-title" aria-label="RECIME">
                         RECIPE<span>IT</span><i aria-hidden="true"></i>
                     </h1>
                 </div>
@@ -40,7 +40,7 @@
                     Sign in to discover your next meal.
                 </p>
 
-                <form id="login-form" action="/api/login" method="post">
+                <form id="login-form">
 
                     <label for="email">
                         Email Address
@@ -51,8 +51,7 @@
                         id="email"
                         name="email"
                         placeholder="Enter your email"
-                        autocomplete="username"
-                        maxlength="254"
+                        autocomplete="email"
                         required
                     >
 
@@ -67,7 +66,6 @@
                             name="password"
                             placeholder="Enter your password"
                             autocomplete="current-password"
-                            maxlength="128"
                             required
                         >
 
@@ -90,7 +88,7 @@
 
                     <button type="submit"
                             class="login-btn">
-                        Sign in
+                        Login
                     </button>
 
                 </form>
