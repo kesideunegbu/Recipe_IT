@@ -3,9 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Recipe Assistant | RECIPE IT</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="dashboard.js" defer></script>
 </head>
 <body>
-    
+    <header class="site-header">
+        <a class="wordmark" href="index.html" aria-label="Recipe It home">RECIPE<span>IT</span></a>
+        <a class="back-link" href="login.html">Back to sign in</a>
+    </header>
+    <main class="workspace">
+        <section class="intro" aria-labelledby="page-title">
+            <div class="intro-copy">
+                <h1 id="page-title">What’s cooking?</h1>
+                <p>Add the ingredients you have, then ask for ideas.</p>
+            </div>
+        </section>
+
+        <section class="pantry panel" aria-labelledby="pantry-title">
+            <h2 id="pantry-title">Your pantry</h2>
+            <form id="pantry-form">
+                <label for="ingredient">Add ingredients</label>
+                <div class="input-row">
+                    <input id="ingredient" placeholder="e.g. eggs, spinach" maxlength="180" required>
+                    <button type="submit">Add</button>
+                </div>
+            </form>
+            <p id="pantry-empty" class="muted">Your ingredients will appear here.</p>
+            <ul id="ingredients" class="ingredients" aria-label="Added ingredients"></ul>
+            <p id="pantry-status" class="sr-only" role="status"></p>
+        </section>
+
+        <section class="chat panel" aria-labelledby="chat-title">
+            <div class="chat-header">
+                <h2 id="chat-title">Recipe assistant</h2>
+                <span class="preview-label">Chat preview</span>
+            </div>
+            <div id="conversation" class="conversation" role="log" aria-label="Conversation">
+                <p class="assistant-message">What would you like to make? Try asking for a quick dinner or a meal using the ingredients in your pantry.</p>
+            </div>
+            <div class="chat-controls">
+                <div class="suggestions" aria-label="Suggested prompts">
+                    <button type="button">What can I make with my pantry?</button>
+                    <button type="button">Give me a 20-minute dinner idea</button>
+                </div>
+                <form id="chat-form">
+                    <label class="sr-only" for="prompt">Message the recipe assistant</label>
+                    <div class="input-row">
+                        <input id="prompt" placeholder="Ask for a recipe…" maxlength="600" required>
+                        <button type="submit">Send</button>
+                    </div>
+                </form>
+                <p class="muted chat-note">AI replies will be available once Gemini is connected.</p>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
